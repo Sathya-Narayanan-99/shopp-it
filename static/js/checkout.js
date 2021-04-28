@@ -22,7 +22,6 @@ form.addEventListener('submit', function(e){
 })
 
 function submitFormData(){
-    console.log('Payment made');
     
     var userFormData = {
         'name':null,
@@ -68,7 +67,6 @@ function submitFormData(){
     })
 
     .then((data) =>{
-        console.log('success:', data);
         alert("Transaction Completed");
         window.location.href = storeUrl
     })

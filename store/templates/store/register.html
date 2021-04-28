@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="box-element">
+                <hr>
+                <h5 style="text-align: center;"><strong>Register Here!</strong></h5>
+                <hr>
+                <form id="register-form" method="POST">
+                    {% csrf_token %}
+                    <div class="form-field ">
+                        <input style="width: 415px;" class="form-control" name="username" type="text" placeholder="Username..">
+                    </div>
+                    
+                    <div class="form-field ">
+                        <input style="width: 415px;" class="form-control" name="email" type="email" placeholder="Email..">
+                    </div>
+
+                    <div class="form-field ">
+                        <input style="width: 415px;" class="form-control" name="name" type="text" placeholder="Name..">
+                    </div>
+                    
+                    <div class="form-field">
+                        <input style="width: 415px;" class="form-control" name="password" type="password" placeholder="Password..">
+                    </div>
+
+                    <hr>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Register">
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

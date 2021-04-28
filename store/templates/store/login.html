@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="box-element" >
+                <hr>
+                <h5 style="text-align: center;"><strong>Enter your login Details</strong></h5>
+                <hr>
+
+                <form id="login-form" method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="form-field ">
+                        <input style="width: 415px;" class="form-control" name="username" type="text" placeholder="Username..">
+                    </div>
+
+                    <br>
+
+                    <div class="form-field">
+                        <input style="width: 415px;" class="form-control" name="password" type="password" placeholder="Password..">
+                    </div>
+
+                    <hr>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Login">
+                    <hr>
+                </form>
+            </div>
+            <br>
+            <p style="text-align: center;">New user? <a href="{% url 'register' %}"> SignUp here</a></p>
+        </div>
+    </div>
+
+{% endblock content %}

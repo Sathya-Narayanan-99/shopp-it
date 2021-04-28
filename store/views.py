@@ -1,6 +1,11 @@
 from django.shortcuts import render
 
-from django.http import JsonResponse
+from django.urls import reverse
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 import json
 
 import datetime
@@ -38,6 +43,9 @@ def cart(request):
 
 
     else:
+
+        cart = json.loads(request.COOKIES['cart'])
+        print('cart:', cart)
         items = []
         order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
 
@@ -65,6 +73,49 @@ def checkout(request):
     context = {'items':items, 'order':order, 'cartItems':cartItems}
     
     return render(request,"store/checkout.html",context)
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('store'))
+            
+            else:
+                return HttpResponse("User account not active")
+            
+        else:
+            return HttpResponse("Invalid credetentials")
+    else:
+        return render(request,'store/login.html',{})
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('store'))
+
+def user_register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+
+        user = User(is_superuser=False, is_staff=False, username=username, email=email)
+        user.set_password(password)
+        user.save()
+
+        print(user.id)
+        customer = Customer(user=user, name=name, email=email)
+        customer.save()
+
+        return HttpResponseRedirect(reverse('store'))
+    else:
+        return render(request, 'store/register.html', {})
 
 def updateItem(request):
     data = json.loads(request.body)
