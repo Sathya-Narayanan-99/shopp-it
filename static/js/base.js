@@ -22,7 +22,7 @@ var cart = JSON.parse(getCookie('cart'));
 if (cart == undefined){
     cart = {}
     console.log('cart was created!')
-    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;"
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;samesite=Lax;"
 }
 
 console.log(cart);

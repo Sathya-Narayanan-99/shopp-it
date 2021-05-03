@@ -14,7 +14,6 @@ for(var i=0; i < updateCartBtn.length; i++){
 }
 
 function addCookieItem(productId, action){
-    console.log('Not logged in..!');
 
     if(action == 'add'){
         if (cart[productId] == undefined){
@@ -37,7 +36,9 @@ function addCookieItem(productId, action){
     }
 
 
-    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;";
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;samesite=Lax;";
+
+    location.reload()
 
 }
 
