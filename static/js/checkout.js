@@ -38,7 +38,7 @@ function submitFormData(){
         'country':null,   
     }
 
-    if(shipping != 'False'){
+    if(shipping != 'False' && shippingAddress != ''){
         shippingFormData.address1 = form.address1.value
         shippingFormData.address2 = form.address2.value
         shippingFormData.city = form.city.value

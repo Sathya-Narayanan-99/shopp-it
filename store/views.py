@@ -64,17 +64,23 @@ def checkout(request):
 
         cartItems = order.get_cart_items
 
+
     else:
         items = []
-        order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
+        order = {'get_cart_items':0, 'get_cart_total':0,}
 
         cartItems = order['get_cart_items']
 
-    context = {'items':items, 'order':order, 'cartItems':cartItems}
+        shippingAddress = False
+
+    context = {'items':items, 'order':order, 'cartItems':cartItems,}
     
     return render(request,"store/checkout.html",context)
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('store'))
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -99,6 +105,9 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('store'))
 
 def user_register(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('store'))
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -131,6 +140,8 @@ def updateItem(request):
         orderItem.quantity += 1
     elif action == 'remove':
         orderItem.quantity -= 1
+    elif action == 'delete':
+        orderItem.quantity = 0
  
     orderItem.save()
 

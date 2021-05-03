@@ -49,6 +49,11 @@
                         </div>
                     </div>
                     <div style="flex: 1px; margin-top: 15px;" >${{item.get_total}}</div>
+                    <div style="margin-top: 17px;">
+                        <div class="quantity">
+                            <img data-product="{{item.product.id}}" data-action="delete" class="chg-quantity update-cart" src="{% static 'images/remove.png' %}" alt="">
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
