@@ -96,8 +96,9 @@ def user_register(request):
         user.set_password(password)
         user.save()
 
-        print(user.id)
-        customer = Customer(user=user, name=name, email=email)
+        customer, created = Customer.objects.get_or_create(email=email,)
+        customer.user=user 
+        customer.name=name
         customer.save()
 
         return HttpResponseRedirect(reverse('store'))
@@ -141,25 +142,50 @@ def processOrder(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['userForm']['total'])
-        order.transaction_id = transaction_id
-
-        if total == order.get_cart_total:
-            order.complete = True
         
-        order.save()
-
-        if order.shipping == True:
-            ShippingAddress.objects.create(
-                customer=customer,
-                cart=order,
-                address1=data['shippingForm']['address1'],
-                address2=data['shippingForm']['address2'],
-                city=data['shippingForm']['city'],
-                state=data['shippingForm']['state'],
-                zipcode=data['shippingForm']['zipcode'],
-                country=data['shippingForm']['country']
-            )
     else:
-        print("User is not logged in")
+        
+        name = data['userForm']['name']
+        email = data['userForm']['email']
+
+        cookieData = cookieCart(request)
+        items = cookieData['items']
+
+        customer, created = Customer.objects.get_or_create(email=email,)
+
+        customer.name = name
+        customer.save()
+
+        order = Order.objects.create(customer=customer)
+
+        for item in items:
+
+            product = Product.objects.get(id=item['product']['id'])
+
+            orderItem = OrderItem.objects.create(
+                product=product,
+                cart=order,
+                quantity=item['quantity'],
+                )
+
+    total = float(data['userForm']['total'])
+    order.transaction_id = transaction_id
+
+    if total == order.get_cart_total:
+        order.complete = True
+        
+    order.save()
+
+    if order.shipping == True:
+        ShippingAddress.objects.create(
+            customer=customer,
+            cart=order,
+            address1=data['shippingForm']['address1'],
+            address2=data['shippingForm']['address2'],
+            city=data['shippingForm']['city'],
+            state=data['shippingForm']['state'],
+            zipcode=data['shippingForm']['zipcode'],
+            country=data['shippingForm']['country']
+        )
+
     return JsonResponse('Payment complete', safe=False)

@@ -41,9 +41,8 @@ def cookieCart(request):
 
         except:
             pass
-
-        cartItems = order['get_cart_items']
-
+    
+    cartItems = order['get_cart_items']
 
     return {'items':items, 'order':order, 'cartItems':cartItems}
 

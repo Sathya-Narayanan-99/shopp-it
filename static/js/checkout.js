@@ -48,8 +48,8 @@ function submitFormData(){
     }
 
     if(user == 'AnonymousUser'){
-        shippingFormData.name = form.name.value
-        shippingFormData.email = form.email.value
+        userFormData.name = form.name.value
+        userFormData.email = form.email.value
     }
 
     url = '/process_order/';
@@ -67,7 +67,12 @@ function submitFormData(){
     })
 
     .then((data) =>{
+
         alert("Transaction Completed");
+
+        cart = {}
+        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;samesite=Lax;"
+
         window.location.href = storeUrl
     })
 }
