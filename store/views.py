@@ -44,10 +44,44 @@ def cart(request):
 
     else:
 
-        cart = json.loads(request.COOKIES['cart'])
+        try:
+            cart = json.loads(request.COOKIES['cart'])
+        except:
+            cart = {}
         print('cart:', cart)
+
         items = []
         order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
+
+
+        for i in cart:
+
+            try:
+                order['get_cart_items'] += cart[i]["quantity"]
+
+                product = Product.objects.get(id=i)
+
+                order['get_cart_total'] += (product.price * cart[i]["quantity"])
+
+                if product.digital == False:
+                    order['shipping'] = True
+
+                item = {
+                    'product':{
+                        'id':product.id,
+                        'name':product.name,
+                        'price':product.price,
+                        'imageURL':product.imageURL,
+                    },
+                    'quantity':cart[i]["quantity"],
+                    'get_total':(product.price * cart[i]["quantity"])
+
+                }
+
+                items.append(item)
+
+            except:
+                pass
 
         cartItems = order['get_cart_items']
 
