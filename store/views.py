@@ -11,79 +11,28 @@ import json
 import datetime
 
 from .models import *
+from .utils import cookieCart, cartData
 
 # Create your views here.
 def store(request):
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
+    data = cartData(request)
 
-        cartItems = order.get_cart_items
-
-    else:
-        items = []
-        order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
-
-        cartItems = order['get_cart_items']
-
+    cartItems = data['cartItems']
+    
     products = Product.objects.all()
+    
     context = {'products':products, 'cartItems':cartItems}
+    
     return render(request,"store/store.html",context)
 
 def cart(request):
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
+    data = cartData(request)
 
-        cartItems = order.get_cart_items
-
-
-    else:
-
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = {}
-        print('cart:', cart)
-
-        items = []
-        order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
-
-
-        for i in cart:
-
-            try:
-                order['get_cart_items'] += cart[i]["quantity"]
-
-                product = Product.objects.get(id=i)
-
-                order['get_cart_total'] += (product.price * cart[i]["quantity"])
-
-                if product.digital == False:
-                    order['shipping'] = True
-
-                item = {
-                    'product':{
-                        'id':product.id,
-                        'name':product.name,
-                        'price':product.price,
-                        'imageURL':product.imageURL,
-                    },
-                    'quantity':cart[i]["quantity"],
-                    'get_total':(product.price * cart[i]["quantity"])
-
-                }
-
-                items.append(item)
-
-            except:
-                pass
-
-        cartItems = order['get_cart_items']
+    items = data['items']
+    order = data['order']
+    cartItems = data['cartItems']
 
     context = {'items':items, 'order':order, 'cartItems':cartItems}
 
@@ -91,21 +40,11 @@ def cart(request):
 
 def checkout(request):
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
+    data = cartData(request)
 
-        cartItems = order.get_cart_items
-
-
-    else:
-        items = []
-        order = {'get_cart_items':0, 'get_cart_total':0,}
-
-        cartItems = order['get_cart_items']
-
-        shippingAddress = False
+    items = data['items']
+    order = data['order']
+    cartItems = data['cartItems']
 
     context = {'items':items, 'order':order, 'cartItems':cartItems,}
     
@@ -132,7 +71,12 @@ def user_login(request):
         else:
             return HttpResponse("Invalid credetentials")
     else:
-        return render(request,'store/login.html',{})
+        
+        data = cartData(request)
+
+        cartItems = data['cartItems']
+        
+        return render(request,'store/login.html',{'cartItems':cartItems,})
 
 def user_logout(request):
     logout(request)
@@ -158,7 +102,12 @@ def user_register(request):
 
         return HttpResponseRedirect(reverse('store'))
     else:
-        return render(request, 'store/register.html', {})
+
+        data = cartData(request)
+
+        cartItems = data['cartItems']
+
+        return render(request, 'store/register.html', {'cartItems':cartItems,})
 
 def updateItem(request):
     data = json.loads(request.body)
