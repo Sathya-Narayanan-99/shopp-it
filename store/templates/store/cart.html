@@ -13,7 +13,7 @@
 
                 <table class="table">
                     <th><h5 style="margin-top: 20px;">Items: <strong>{{order.get_cart_items}}</strong></h5></th>
-                    <th><h5 style="margin-top: 20px;">Total: <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                    <th><h5 style="margin-top: 20px;">Total: <strong>&#8377;{{order.get_cart_total|floatformat:2}}</strong></h5></th>
                     <th>
                         <a class="btn btn-success" style="float: right; margin: 5px; margin-top: 15px;" href="{% url 'checkout' %}">
                             Checkout
@@ -39,7 +39,7 @@
                         <img class="row-image" src="{{item.product.imageURL}}" alt="">
                     </div>
                     <div style="flex: 2px; margin-top: 15px;" >{{item.product.name}}</div>
-                    <div style="flex: 1px; margin-top: 15px;" >${{item.product.price|floatformat:2}}</div>
+                    <div style="flex: 1px; margin-top: 15px;" >&#8377;{{item.product.price|floatformat:2}}</div>
                     <div style="flex: 1px; margin-top: 7px;" >
                         <p class="quantity">x{{item.quantity}}</p>
 
@@ -48,7 +48,7 @@
                             <img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static 'images/arrow-down.png' %}" alt="">
                         </div>
                     </div>
-                    <div style="flex: 1px; margin-top: 15px;" >${{item.get_total}}</div>
+                    <div style="flex: 1px; margin-top: 15px;" >&#8377;{{item.get_total}}</div>
                     <div style="margin-top: 17px;">
                         <div class="quantity">
                             <img data-product="{{item.product.id}}" data-action="delete" class="chg-quantity update-cart" src="{% static 'images/remove.png' %}" alt="">

@@ -38,8 +38,23 @@ function addCookieItem(productId, action){
 
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/;samesite=Lax;";
 
-    location.reload()
+    var data = 0;
 
+    for(item in cart){
+        data += cart[item].quantity
+    }
+
+    var path = window. location. pathname;
+    if (path == '/'){
+        updateCartCount(data);
+    }else{
+        location.reload()
+    }
+
+}
+
+function updateCartCount(data){
+    document.getElementById('cart-total').innerHTML = data;
 }
 
 function updateUserItem(productId, action){
@@ -60,6 +75,11 @@ function updateUserItem(productId, action){
     })
 
     .then((data) =>{
-        location.reload()
+        var path = window. location. pathname;
+        if (path == '/'){
+            updateCartCount(data);
+        }else{
+            location.reload()
+        }
     })
 }

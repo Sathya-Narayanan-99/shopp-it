@@ -132,7 +132,11 @@ def updateItem(request):
     if orderItem.quantity <=0:
         orderItem.delete()
 
-    return JsonResponse('Item was added', safe=False)
+    cartdata = cartData(request)
+
+    cartItems = cartdata['cartItems']
+
+    return JsonResponse(cartItems, safe=False)
 
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
