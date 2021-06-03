@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import socket
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = BASE_DIR/'static'
@@ -22,14 +24,18 @@ STATIC_DIR = BASE_DIR/'static'
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n+3oua3mw0p1!0)=qnyv2z2hveo+^_cc!*tg%^@djfg3^*o6l2'
+if os.getcwd() == '/app':
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+else:
+    from secret_key import secret_key
+    SECRET_KEY=secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
-ALLOWED_HOSTS = ['127.0.0.1', local_ip]
+ALLOWED_HOSTS = ['127.0.0.1', local_ip, 'shopp-it.herokuapp.com']
 
 
 # Application definition
@@ -46,6 +52,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -122,6 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = BASE_DIR/'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     STATIC_DIR
@@ -136,3 +146,9 @@ MEDIA_ROOT = BASE_DIR/'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if os.getcwd() == '/app':
+    DEBUG = False
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True

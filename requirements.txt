@@ -1,0 +1,10 @@
+asgiref
+certifi==2020.12.5
+Django
+gunicorn==20.1.0
+olefile==0.46
+Pillow
+psycopg2
+pytz
+sqlparse
+whitenoise==5.2.0
