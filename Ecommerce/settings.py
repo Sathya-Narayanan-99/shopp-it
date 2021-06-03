@@ -26,9 +26,6 @@ STATIC_DIR = BASE_DIR/'static'
 # SECURITY WARNING: keep the secret key used in production secret!
 if os.getcwd() == '/app':
     SECRET_KEY = os.environ.get('SECRET_KEY')
-else:
-
-    SECRET_KEY=secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
