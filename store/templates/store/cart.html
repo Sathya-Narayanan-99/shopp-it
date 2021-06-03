@@ -32,7 +32,8 @@
                     <div style="flex: 1px;" ><strong>Quantity</strong></div>
                     <div style="flex: 1px;" ><strong>Total</strong></div>
                 </div>
-
+                
+                {% if items %}
                 {% for item in items %}
                 <div class="cart-row" >
                     <div style="flex: 2px;" >
@@ -56,6 +57,10 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <h3 class="text-center">No items in cart</h3>
+                <hr>
+                {% endif %}
             </div>
 
         </div>

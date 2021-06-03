@@ -14,13 +14,44 @@
                 <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">
                     Add to Cart
                 </button>
-                <a class="btn btn-outline-success" href="">View</a>
+                <a class="btn btn-outline-success" data-toggle="modal" data-target="#Modal-{{product.id}}">View</a>
                 <h3 style="display: inline-block; float: right; margin-top: 2px;">
                     &#8377;{{product.price|floatformat:2}}
                 </h3>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="Modal-{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">{{ product.name }}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <img style="width: 30em;" src="{{product.imageURL}}">
+                </div>
+                <div class="modal-footer">
+                <button id="modal-{{product.id}}-close"  type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button data-product="{{product.id}}" data-action="add" data-modal="modal-{{product.id}}-close" class="btn btn-outline-secondary add-btn update-cart modal-add">
+                    Add to Cart
+                </button>
+                </div>
+            </div>
+            </div>
+        </div>
         {% endfor %}
 
     </div>
+    <script>
+        var modals = document.getElementsByClassName("modal-add")
+        
+        for (let i = 0; i < modals.length; i++) {
+            modals[i].addEventListener("click", function(){
+                document.getElementById(this.dataset.modal).click()
+            })
+        }
+    </script>
 {% endblock content %}
