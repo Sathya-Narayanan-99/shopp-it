@@ -27,7 +27,7 @@ STATIC_DIR = BASE_DIR/'static'
 if os.getcwd() == '/app':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 else:
-    from secret_key import secret_key
+
     SECRET_KEY=secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
