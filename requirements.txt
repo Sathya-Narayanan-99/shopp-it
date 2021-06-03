@@ -1,5 +1,6 @@
 asgiref
 certifi==2020.12.5
+dj-database-url==0.5.0
 Django
 gunicorn==20.1.0
 olefile==0.46
